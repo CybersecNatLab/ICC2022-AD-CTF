@@ -16,5 +16,5 @@
 ## How to run
 
 - Check sla: `ACTION=CHECK_SLA TEAM_ID=0 ROUND=0 ./checker.py`
-- Put flag: `ACTION=CHECK_SLA TEAM_ID=0 ROUND=0 FLAG=FLAG ./checker.py`
-- Get flag: `ACTION=CHECK_SLA TEAM_ID=0 ROUND=0 FLAG=FLAG ./checker.py`
+- Put flag: `ACTION=PUT_FLAG TEAM_ID=0 ROUND=0 FLAG=FLAG ./checker.py`
+- Get flag: `ACTION=GET_FLAG TEAM_ID=0 ROUND=0 FLAG=FLAG ./checker.py`
