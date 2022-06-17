@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  examportal-db:
+    image: mysql
+    container_name: "examportal-db"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASS}"
+      MYSQL_DATABASE: examportal
+      MYSQL_ROOT_HOST: "%"
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    restart: unless-stopped
+    volumes:
+      - ./examportal/db/init:/docker-entrypoint-initdb.d
+      - ./examportal/db/data:/var/lib/mysql
+
+  auth_service:
+    build: ./auth_service
+    container_name: "auth_service"
+    ports:
+      - "0.0.0.0:1234:8000"
+    restart: unless-stopped
+
+  examnotes:
+    build: ./examnotes
+    container_name: "examnotes"
+    ports:
+      - "0.0.0.0:1235:8000"
+    restart: unless-stopped
+
+  encryptednotes:
+    build: ./encryptednotes
+    container_name: "encryptednotes"
+    ports:
+      - "0.0.0.0:1236:8000"
+    restart: unless-stopped
+
+  examportal:
+    build: ./examportal
+    container_name: "examportal"
+    environment:
+      DBHOST: examportal-db
+      DBUSER: root
+      DBPASS: "${DB_PASS}"
+      DBNAME: examportal
+    ports:
+      - "0.0.0.0:1237:80"
+    restart: unless-stopped
+    depends_on:
+      - examportal-db

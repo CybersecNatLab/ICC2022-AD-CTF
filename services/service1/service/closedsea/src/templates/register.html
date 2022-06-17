@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% block content %}
+<h1><i class="fa-solid fa-user-plus"></i> Register</h1>
+<form action="/register" method="POST" id="register_form">
+  <input type="hidden" name="public_key" id="public_key" />
+
+  <div class="form-group mt-3">
+    <label for="register_username" class="form-label">Username</label>
+    <input type="text" name="username" class="form-control" placeholder="Username" id="register_username" />
+  </div>
+
+  <div class="form-group mt-3">
+    <label for="register_password" class="form-label">Password</label>
+    <input
+      type="password"
+      name="password"
+      class="form-control"
+      placeholder="Password (A strong one, please)"
+      id="register_password"
+    />
+  </div>
+
+  <div class="form-group mt-3">
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#keyModal">
+      <i class="fa-solid fa-key"></i> Create a new key!
+    </button>
+  </div>
+
+  <div class="modal fade" id="keyModal" tabindex="-1" role="dialog" aria-labelledby="keyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="keyModalLabel"><i class="fa-solid fa-key"></i> Create a new key!</h3>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><i class="fa-solid fa-times"></i></span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            Private: <code id="private_ui"></code><br />
+            Public: <code id="public_ui"></code>
+          </div>
+          <div class="container alert alert-warning mt-3">
+            <i class="fa-solid fa-triangle-exclamation"></i> Warning: The keys are generate client-side. You MUST save
+            your private key somewhere.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="modal_close">
+            <i class="fa-solid fa-times"></i> Close
+          </button>
+          <button type="button" class="btn btn-success" onclick="UI_create_key()" id="generate_new_key">
+            <i class="fa-solid fa-key"></i> Generate key!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary mt-3" id="register_submit"><i class="fa-solid fa-user-plus"></i> Register</button>
+</form>
+<script>
+  $("#register_form").submit(function (e) {
+    e.preventDefault();
+    priv_key = $("#private_ui").text();
+    localStorage.setItem("private_key", priv_key);
+    e.target.submit();
+  });
+</script>
+{% endblock %}

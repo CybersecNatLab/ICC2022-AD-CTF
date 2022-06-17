@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% block content %}
+<h1><i class="fa-solid fa-ship"></i> ClosedSea</h1>
+<div class="mt-2">The first NFT market that lets you buy copy of NFT!</div>
+<div class="mt-2"><small>(Still less expensive that ctrl-c ctrl-v)</small></div>
+<div class="mt-2">We also have TWO different blockchains!</div>
+<div class="mt-3">$PC - Privacy coins and $SC - Sea coins</div>
+
+<div class="mt-3">
+  <a href="{{minter_url}}" class="btn btn-3 btn-primary" target="_blank"
+    ><i class="fa-solid fa-person-digging"></i> mint some new nfts!</a
+  >
+  {% if session['username'] %} {% else %}
+  <a href="/register" class="btn btn-3 btn-success"
+    ><i class="fa-solid fa-user-plus"></i> Start now!</a
+  >
+  {% endif %}
+</div>
+
+<h3 class="mt-5">
+  <i class="fa-solid fa-money-bill-transfer"></i> Current transactions
+</h3>
+
+<ul class="list-group"></ul>
+
+<script type="text/javascript">
+  const socket = io("http://" + location.host);
+  socket.connect();
+
+  function transaction_to_html(item) {
+    var val = "<li class='list-group-item active'>" + item.tx_id + "</li>";
+    val +=
+      "<li class='list-group-item'><b>time</b>: " +
+      item.time_executed +
+      "</li>";
+    val +=
+      "<li class='list-group-item'><b>from_user</b>: " +
+      item.from_user +
+      "</li>";
+    val +=
+      "<li class='list-group-item'><b>to_user</b>: " + item.to_user + "</li>";
+    val += "<li class='list-group-item'><b>type</b>: " + item.type + "</li>";
+    return val;
+  }
+
+  socket.on("connect", () => {
+    console.log(socket.connected);
+    socket.emit("transactions_all");
+  });
+
+  socket.on("transactions_resp", (data) => {
+    $(".list-group").empty();
+    data.forEach((item) => {
+      var html = transaction_to_html(item);
+      $(".list-group").append(html);
+    });
+  });
+
+  socket.on("transactions_rt", (item) => {
+    var html = transaction_to_html(item);
+    $(".list-group").prepend(html);
+  });
+</script>
+{% endblock %}

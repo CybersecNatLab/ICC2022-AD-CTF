@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1><i class="fa-solid fa-image"></i> NFT List</h1>
+
+{% for nft in nfts %}
+
+<div class="card mt-3 m-auto w-100">
+  <h5 class="card-header">{{nft['title']}}</h5>
+  <div class="card-body">
+    <p class="card-text">An nft. Buy it to see its secrets!</p>
+    <a href="{{url_for('frontend.view', nft_id=nft.nft_id)}}" class="btn btn-primary">
+      <i class="fa-solid fa-magnifying-glass"></i> View NFT
+    </a>
+    <a href="{{url_for('frontend.user', user_id=nft.owner)}}" class="btn btn-primary">
+      <i class="fa-solid fa-magnifying-glass"></i> See owner profile
+    </a>
+  </div>
+  <div class="card-footer text-muted">
+    <i class="fa-solid fa-coins"></i> Price: {{nft['price']}} {% if nft['chain_number'] %}$SC{% else %}$PC{% endif %}
+  </div>
+</div>
+
+{% endfor %}
+<nav aria-label="..." class="mt-5">
+  <ul class="pagination justify-content-center">
+    {% if page < 1%}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1"><i class="fa-solid fa-angles-left"></i> Prev</a>
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link" href="{{url_for('frontend.listing')}}?p={{page-1}}" tabindex="-1"
+        ><i class="fa-solid fa-angles-left"></i> Prev</a
+      >
+    </li>
+    {% endif %}
+    <li class="page-item">
+      <a class="page-link" href="{{url_for('frontend.listing')}}?p={{page+1}}" tabindex="-1"
+        ><i class="fa-solid fa-angles-right"></i> Next</a
+      >
+    </li>
+  </ul>
+</nav>
+
+{% endblock %}

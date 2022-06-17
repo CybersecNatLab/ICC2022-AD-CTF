@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  closedsea:
+    build: closedsea
+    environment:
+      SECRET: "${SECRET_CLOSEDSEA}"
+      DBHOST: blockchain
+      DBUSER: root
+      DBPASS: "${BLOCKCHAIN_PASSWORD}"
+      DBSCHEMA: blockchain
+    ports:
+      - "0.0.0.0:3003:80"
+    command: bash -c "/usr/bin/supervisord"
+    depends_on:
+      - blockchain
+    restart: unless-stopped
+
+  blockchain:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${BLOCKCHAIN_PASSWORD}"
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    volumes:
+      - ./blockchain/init:/docker-entrypoint-initdb.d
+      - ./blockchain/data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  transactions:
+    build: transactions
+    command: ["node", "app.js"]
+    environment:
+      DBHOST: blockchain
+      DBUSER: root
+      DBPASS: "${BLOCKCHAIN_PASSWORD}"
+      DBSCHEMA: blockchain
+    depends_on:
+      - blockchain
+    restart: unless-stopped
+
+  minter:
+    build: minter
+    environment:
+      CLOSED_SEA_HOST: closedsea
+      TRANSACTION_HOST: transactions:8085
+    ports:
+      - "0.0.0.0:3004:80"
+    restart: unless-stopped

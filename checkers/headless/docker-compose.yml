@@ -1,0 +1,73 @@
+version: "2"
+services:
+  #TODO:
+  # - Restart
+  # Limits
+  headless_team_0:
+    build: .
+    environment:
+      - TEAM_ID=0
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+  headless_team_1:
+    build: .
+    environment:
+      - TEAM_ID=1
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+  headless_team_2:
+    build: .
+    environment:
+      - TEAM_ID=2
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+  headless_team_3:
+    build: .
+    environment:
+      - TEAM_ID=3
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+  headless_team_4:
+    build: .
+    environment:
+      - TEAM_ID=4
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+  headless_team_5:
+    build: .
+    environment:
+      - TEAM_ID=5
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+  headless_team_6:
+    build: .
+    environment:
+      - TEAM_ID=6
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+  headless_team_7:
+    build: .
+    environment:
+      - TEAM_ID=7
+    networks:
+      - default
+      - checkers
+    restart: unless-stopped
+
+networks:
+  checkers:
+    external: true

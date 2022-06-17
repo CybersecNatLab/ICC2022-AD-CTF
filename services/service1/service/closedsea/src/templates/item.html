@@ -1,0 +1,229 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1><i class="fa-solid fa-image"></i> NFT Info</h1>
+
+{% if own %}
+
+<div class="card mt-3 m-auto w-100">
+  <h5 class="card-header">{{nft['title']}}</h5>
+  <div class="card-body">
+    <p class="card-text">You own this nft!</p>
+    <p class="card-text">{{nft['data']}}</p>
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#donateModal">
+      <i class="fa-solid fa-hand-holding-dollar"></i> Donate this NFT!
+    </button>
+    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#switchModal">
+      <i class="fa-solid fa-shuffle"></i> Switch privacy
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="card-title"><i class="fa-solid fa-money-bill-transfer"></i> Current transactions</div>
+    <div class="list-group"></div>
+  </div>
+  <div class="card-footer text-muted">
+    <i class="fa-solid fa-coins"></i> Price: {{nft['price']}} {% if nft['chain_number'] %}$SC{% else %}$PC{% endif %}
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="switchModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="switchModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="switchModalLabel"><i class="fa-solid fa-shuffle"></i> Switch privacy</h3>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i class="fa-solid fa-times"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form id="switchForm" method="POST" action="{{url_for('frontend.switch', nft_id=nft['nft_id'])}}">
+            {% if nft['chain_number'] %}
+            <span>You are switching from <b>public</b> to <b>private</b></span>
+            <input name="chain" type="hidden" value="0" />
+            {% else %}
+            <span>You are switching from <b>private</b> to <b>public</b></span>
+            <input name="chain" type="hidden" value="1" />
+            {% endif %}
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          <i class="fa-solid fa-times"></i> Close
+        </button>
+        <button type="button" class="btn btn-success" onclick="switch_chain()">
+          <i class="fa-solid fa-shuffle"></i> Switch
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="donateModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="donateModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="donateModalLabel">
+          <i class="fa-solid fa-hand-holding-dollar"></i> Donate this NFT!
+        </h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i class="fa-solid fa-times"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <form id="donateForm" method="POST" action="{{url_for('frontend.donate', nft_id=nft['nft_id'])}}">
+            <div class="form-group mt-3">
+              <input id="donateSignature" name="signature" type="hidden" />
+              <label for="to_addr" class="form-label">Recipient address:</label>
+              <input id="to_addr" class="form-control" placeholder="Recipient address" name="to_addr" type="text" />
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          <i class="fa-solid fa-times"></i> Close
+        </button>
+        <button type="button" class="btn btn-success" onclick="donate()">
+          <i class="fa-solid fa-hand-holding-dollar"></i> Donate
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+
+<h2>{{nft['title']}}</h2>
+
+<div class="card mt-3 m-auto w-100">
+  <h5 class="card-header">{{nft['title']}}</h5>
+  <div class="card-body">
+    <p class="card-text">An nft. Buy it to see its secrets!</p>
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#buyModal">
+      <i class="fa-solid fa-cart-shopping"></i> Buy!
+    </button>
+    <a href="{{url_for('frontend.user', user_id=nft.owner)}}" class="btn btn-primary">
+      <i class="fa-solid fa-magnifying-glass"></i> See owner profile
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="card-title"><i class="fa-solid fa-money-bill-transfer"></i> Current transactions</div>
+    <ul class="list-group"></ul>
+  </div>
+
+  <div class="card-footer text-muted">
+    <i class="fa-solid fa-coins"></i> Price: {{nft['price']}} {% if nft['chain_number'] %}$SC{% else %}$PC{% endif %}
+  </div>
+</div>
+
+<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="buyModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="buyModalLabel"><i class="fa-solid fa-cart-shopping"></i> Buy the NFT</h3>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i class="fa-solid fa-times"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <span>
+            <i class="fa-solid fa-coins"></i> Price: {{nft['price']}} {% if nft['chain_number'] %}$SC{% else %}$PC{%
+            endif %}
+          </span>
+          <form id="buyForm" method="POST" action="{{url_for('frontend.buy', nft_id=nft['nft_id'])}}">
+            <input id="buySignature" name="signature" type="hidden" />
+            <input name="price" type="hidden" value="{{nft.price}}" />
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+          <i class="fa-solid fa-times"></i> Close
+        </button>
+        <button type="button" class="btn btn-success" onclick="buy()" id="buy_submit">
+          <i class="fa-solid fa-cart-shopping"></i> BUY!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+<script type="text/javascript">
+  const socket = io("http://" + location.host);
+  socket.connect();
+
+  function transaction_to_html(item) {
+    var val = "<li class='list-group-item active'>" + item.tx_id + "</li>";
+    val += "<li class='list-group-item'><b>time</b>: " + item.time_executed + "</li>";
+    val += "<li class='list-group-item'><b>from_user</b>: " + item.from_user + "</li>";
+    val += "<li class='list-group-item'><b>to_user</b>: " + item.to_user + "</li>";
+    val += "<li class='list-group-item'><b>type</b>: " + item.type + "</li>";
+    return val;
+  }
+
+  socket.on("connect", () => {
+    console.log(socket.connected);
+    socket.emit("transactions_for_nft", "{{nft['nft_id']}}");
+  });
+
+  socket.on("transactions_resp", (data) => {
+    $(".list-group").empty();
+    data.forEach((item) => {
+      var html = transaction_to_html(item);
+      $(".list-group").append(html);
+    });
+  });
+
+  socket.on("transactions_rt", (item) => {
+    if (item.nft_id != "{{nft['nft_id']}}") return;
+    var html = transaction_to_html(item);
+    $(".list-group").prepend(html);
+  });
+</script>
+<script type="text/javascript">
+  function buy() {
+    var nft_id = "{{nft['nft_id']}}";
+    var user_id = window.user_data.user_id;
+    var blob = JSON.stringify({ nft_id, user_id });
+
+    var privkey = window.user_data.private_key;
+    var signature = sign(blob, privkey);
+    $("#buySignature").val(signature);
+    $("#buyForm").submit();
+  }
+
+  function donate() {
+    var nft_id = "{{nft['nft_id']}}";
+    var from_addr = window.user_data.user_id;
+    var to_addr = $("#to_addr").val();
+    var blob = JSON.stringify({ nft_id, from_addr, to_addr });
+
+    var privkey = window.user_data.private_key;
+    var signature = sign(blob, privkey);
+    $("#donateSignature").val(signature);
+    $("#donateForm").submit();
+  }
+
+  function switch_chain() {
+    $("#switchForm").submit();
+  }
+</script>
+{% endblock %}

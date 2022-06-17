@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ClosedSea</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="/static/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <script
+      src="/static/bootstrap.bundle.min.js"
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <script src="/static/jquery.min.js"></script>
+    <script
+      src="/static/socket.io.min.js"
+      integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script src="/static/sjcl.js"></script>
+    <script src="/static/crypto.js"></script>
+    <style>
+      /* Remove the navbar's default margin-bottom and rounded borders */
+      .navbar {
+        margin-bottom: 0;
+        border-radius: 0;
+      }
+
+      /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+      .row.content {
+        height: 450px;
+      }
+
+      /* Set gray background color and 100% height */
+      .sidenav {
+        padding-top: 20px;
+        background-color: #f1f1f1;
+        height: 100%;
+      }
+
+      /* Set black background color, white text and some padding */
+      footer {
+        background-color: #555;
+        color: white;
+        padding: 15px;
+      }
+
+      /* On small screens, set height to 'auto' for sidenav and grid */
+      @media screen and (max-width: 767px) {
+        .sidenav {
+          height: auto;
+          padding: 15px;
+        }
+        .row.content {
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    {% if session['username'] %}
+    <script>
+      window.user_data = {
+        username: '{{g.user['username']}}',
+        user_id: '{{g.user['id']}}',
+        public_key: '{{g.user['public_key']}}',
+        private_key: localStorage.getItem('private_key')
+      }
+    </script>
+    {% endif %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/"
+          ><i class="fa-solid fa-ship"></i> ClosedSea</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarToggler"
+          aria-controls="navbarToggler"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarToggler">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="/"
+                ><i class="fa-solid fa-home"></i> Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/listing"
+                ><i class="fa-solid fa-image"></i> NFT List
+              </a>
+            </li>
+            {% if session['username'] %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{minter_url}}" target="_blank">
+                <i class="fa-solid fa-person-digging"></i> Mint NFT
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link">
+                <span class="badge bg-primary"> {{g.user['money1']}} $PC</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link">
+                <span class="badge bg-success"> {{g.user['money2']}} $SC</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if session['username'] %}
+            <li class="nav-item">
+              <a class="btn btn-success mx-1 my-1" href="/dashboard">
+                <i class="fa-solid fa-gauge"></i> Dashboard
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="btn btn-danger mx-1 my-1" href="/logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+              </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="btn btn-success mx-1 my-1" href="/register">
+                <i class="fa-solid fa-user-plus"></i> Sign up
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary mx-1 my-1" href="/login">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign in
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid text-center">
+      <div class="row">
+        <div class="d-none d-lg-block col-lg-3 py-5">
+          <img
+            class="w-100 border rounded"
+            src="https://nftnow.com/wp-content/uploads/2022/04/Screen-Shot-2022-04-08-at-10.37.13-AM.png"
+          />
+        </div>
+        <div class="col-12 col-lg-6 text-left py-5 bg-white rounded border">
+          {% with messages = get_flashed_messages() %} {% if messages %} {% for
+          message in messages %}
+          <div class="alert alert-warning">
+            <i class="fa-solid fa-triangle-exclamation"></i> {{message}}
+          </div>
+          {% endfor %} {% endif %} {% endwith %} {% block content %} {% endblock
+          %}
+        </div>
+        <div class="d-none d-lg-block col-lg-3 py-5">
+          <img
+            class="w-100 border rounded"
+            src="https://images3.memedroid.com/images/UPLOADED616/61d491ab664cd.jpeg"
+          />
+        </div>
+      </div>
+    </div>
+
+    <footer class="container-fluid text-center">
+      <i class="fa-solid fa-ship"></i> ClosedSea, 2022
+    </footer>
+  </body>
+</html>

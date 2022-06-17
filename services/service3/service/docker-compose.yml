@@ -1,0 +1,12 @@
+services:
+  rpn:
+    build: .
+    ports:
+      - "0.0.0.0:1337:1982"
+    privileged: true
+    restart: "unless-stopped"
+    volumes:
+      - flagstore:/new_root/flags
+
+volumes:
+  flagstore:

@@ -1,0 +1,20 @@
+version: "2.4"
+
+services:
+  service:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:5000:5000"
+    volumes:
+      - service-data:/srv/service/data
+    pids_limit: 1024
+    cpus: 2
+    mem_limit: 2048M
+    mem_reservation: 512M
+    memswap_limit: 0
+    read_only: true
+    shm_size: 64M
+
+volumes:
+  service-data:

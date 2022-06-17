@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="h-100">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"
+        ></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <title>Trademark</title>
+    </head>
+
+    <body class="bg-secondary h-100 d-flex align-items-center">
+        <!-- Navbar Fixed Top -->
+        <nav class="navbar fixed-top navbar-expand-lg navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand btn btn-danger" href="#" onclick="show('home')"> <i class="fa-solid fa-trademark"></i> Trademark </a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item" id="navbar_home">
+                            <a class="nav-link" href="#" onclick="show('home')"><i class="fa-solid fa-house"></i> Home</a>
+                        </li>
+                        <li class="nav-item" id="navbar_list">
+                            <a class="nav-link" href="#" onclick="listProducts()"><i class="fa-solid fa-list-ul"></i> List</a>
+                        </li>
+                        <li class="nav-item" id="navbar_create">
+                            <a class="nav-link" href="#" onclick="openCreateProduct()"><i class="fa-solid fa-file-circle-plus"></i> Create</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <a href="#" id="button_user" class="btn btn-success mx-1"><i class="fa-solid fa-user"></i> <span></span></a>
+                        <a href="#" id="button_login" class="btn btn-success mx-1" onclick="show('login')"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                        <a href="#" id="button_signup" class="btn btn-primary mx-1" onclick="show('register')"><i class="fa-solid fa-user-plus"></i> Signup</a>
+                        <a href="#" id="button_logout" class="btn btn-danger mx-1" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Home -->
+        <div id="home" class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 bg-white border p-4">
+                    <h3 class="text-center"><i class="fa-solid fa-trademark"></i> Trademark</h3>
+                    <hr />
+                    <div>
+                        Welcome to Trademark, a brand new .NET License Server! <br />
+                        Here users can create new products and generate a number of license keys that can be used to download the content of the products.
+                    </div>
+                    <hr />
+                    <div class="text-center">
+                        <button class="btn btn-primary w-50" onclick="listProducts()"><i class="fa-solid fa-list-ul"></i> List products!</button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-primary w-50" onclick="openCreateProduct()"><i class="fa-solid fa-file-circle-plus"></i> Create a new product!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register -->
+        <div id="register" class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 bg-white border p-4">
+                    <h3><i class="fa-solid fa-user-plus"></i> Register</h3>
+                    <hr />
+
+                    <div class="mt-3">
+                        <label for="register_username" class="form-label"><i class="fa-solid fa-user"></i> Username</label>
+                        <input type="text" id="register_username" class="form-control" name="username" placeholder="username" />
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="register_password" class="form-label"><i class="fa-solid fa-asterisk"></i> Password</label>
+                        <input type="text" id="register_password" class="form-control" name="password" placeholder="password" />
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <button class="btn btn-primary w-50" type="submit" onclick="signup()"><i class="fa-solid fa-user-plus"></i> Signup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login -->
+        <div id="login" class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 bg-white border p-4">
+                    <h3><i class="fa-solid fa-right-to-bracket"></i> Login</h3>
+                    <hr />
+
+                    <div class="mt-3">
+                        <label for="login_username" class="form-label"><i class="fa-solid fa-user"></i> Username</label>
+                        <input type="text" id="login_username" class="form-control" name="username" placeholder="username" />
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="login_password" class="form-label"><i class="fa-solid fa-asterisk"></i> Password</label>
+                        <input type="text" id="login_password" class="form-control" name="password" placeholder="password" />
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <button class="btn btn-success w-50" type="submit" onclick="login()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- List products -->
+        <div id="list" class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 bg-white border p-4">
+                    <h3><i class="fa-solid fa-list-ul"></i> List products</h3>
+                    <hr />
+                    <div>
+                        <h5>Open a product:</h5>
+                        <input type="text" id="open_product_id" class="form-control" name="open_product_id" placeholder="id" />
+                        <div class="mt-3 text-center">
+                            <button class="btn btn-success w-50" type="submit" onclick="readProduct($('#open_product_id').val())">
+                                <i class="fa-solid fa-circle-info"></i> Open product
+                            </button>
+                        </div>
+                    </div>
+                    <hr />
+                    <h5>Your product:</h5>
+                    <div class="list-group" style="max-height: 500px; overflow-y: auto" id="list-products"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create product -->
+        <div id="create" class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 bg-white border p-4">
+                    <h3><i class="fa-solid fa-file-circle-plus"></i> Create product</h3>
+                    <hr />
+
+                    <div class="mt-3">
+                        <label for="create_name" class="form-label"><i class="fa-solid fa-pen-to-square"></i> Name</label>
+                        <input type="text" class="form-control" id="create_name" name="name" placeholder="name" />
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="create_description" class="form-label"><i class="fa-solid fa-circle-info"></i> Description</label>
+                        <input type="text" class="form-control" id="create_description" name="description" placeholder="description" />
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="create_content" class="form-label"><i class="fa-solid fa-file-signature"></i> Content</label>
+                        <input type="text" class="form-control" id="create_content" name="content" placeholder="content" />
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <button class="btn btn-success w-50" type="submit" onclick="createProduct()"><i class="fa-solid fa-user-plus"></i> Create product!</button>
+                    </div>
+
+                    <div id="created_product">
+                        <hr />
+                        <div class="alert alert-success" role="alert"><i class="fa-solid fa-check"></i> Product created successfully with id <b id="created_product_id"></b>!</div>
+                        <hr />
+                        <div><i class="fa-solid fa-list-ol"></i> Product licenses:</div>
+
+                        <input type="text" class="form-control mt-3" id="license_1" name="content" placeholder="license" />
+                        <input type="text" class="form-control mt-3" id="license_2" name="content" placeholder="license" />
+                        <input type="text" class="form-control mt-3" id="license_3" name="content" placeholder="license" />
+                        <input type="text" class="form-control mt-3" id="license_4" name="content" placeholder="license" />
+                        <input type="text" class="form-control mt-3" id="license_5" name="content" placeholder="license" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Read product -->
+        <div id="read" class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-6 bg-white border p-4">
+                    <h3><i class="fa-solid fa-file"></i> Product info</h3>
+                    <hr />
+                    <div>
+                        <b><i class="fa-solid fa-hashtag"></i> Id</b>: <span class="text-break" id="product_id_info"></span>
+                    </div>
+                    <div>
+                        <b><i class="fa-solid fa-user-pen"></i> Publisher</b>: <span class="text-break" id="product_publisher"></span>
+                    </div>
+                    <div>
+                        <b><i class="fa-solid fa-circle-info"></i> Description</b>: <span class="text-break" id="product_description"></span>
+                    </div>
+                    <div>
+                        <b><i class="fa-solid fa-calendar"></i> Creation date</b>: <span class="text-break" id="product_created"></span>
+                    </div>
+                    <hr />
+                    <input type="hidden" id="product_id" />
+                    <div id="insert_license">
+                        <label for="license" class="form-label"><i class="fa-solid fa-id-card"></i> License code</label>
+                        <input type="text" class="form-control" id="license" placeholder="license" />
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-success" onclick="downloadProduct()"><i class="fa-solid fa-download"></i> Download product!</button>
+                    </div>
+                    <div id="product_read_content">
+                        <hr />
+                        <div class="mt-3"><i class="fa-solid fa-file-signature"></i> Content</div>
+                        <textarea class="form-control mt-3" rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let sections = ["home", "register", "login", "list", "create", "read"];
+            function show(section) {
+                for (let s of sections) $("#" + s).hide();
+                for (let s of sections) $("#navbar_" + s + " a").removeClass("active");
+
+                $("#" + section).show();
+                $("#navbar_" + section + " a").addClass("active");
+            }
+
+            function logout() {
+                localStorage.removeItem("token");
+                $("#button_login").show();
+                $("#button_signup").show();
+                $("#button_logout").hide();
+                show("home");
+                updateHeader();
+            }
+
+            async function getCurrentUser() {
+                const token = localStorage.getItem("token");
+                if (token !== null && token !== "") {
+                    const response = await fetch("/api/users", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            Authorization: "Bearer " + localStorage.getItem("token"),
+                        },
+                    });
+                    return await response.json();
+                } else return false;
+            }
+            async function updateHeader() {
+                let user = await getCurrentUser();
+                if (user) {
+                    $("#button_login").hide();
+                    $("#button_signup").hide();
+                    $("#button_logout").show();
+                    $("#navbar_list").show();
+                    $("#navbar_create").show();
+                    $("#button_user").show();
+                    $("#button_user span").text(user.username);
+                } else {
+                    localStorage.removeItem("token");
+                    $("#button_user").hide();
+                    $("#button_login").show();
+                    $("#button_signup").show();
+                    $("#button_logout").hide();
+                    $("#navbar_list").hide();
+                    $("#navbar_create").hide();
+                }
+            }
+
+            async function login() {
+                let password = $("#login_password").val();
+                let username = $("#login_username").val();
+
+                const response = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ password, username }),
+                });
+
+                if (response.status === 200) {
+                    let res = await response.json();
+                    let user_id = res["user_id"];
+                    let session = res["session"];
+                    localStorage.setItem("token", btoa(user_id + ":" + session));
+                    show("home");
+                    await updateHeader();
+                } else alert("Invalid username or password!");
+            }
+
+            async function signup() {
+                let password = $("#register_password").val();
+                let username = $("#register_username").val();
+
+                const response = await fetch("/api/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ password, username }),
+                });
+
+                if (response.status === 201) {
+                    let res = await response.json();
+                    let user_id = res["user_id"];
+                    let session = res["session"];
+                    localStorage.setItem("token", btoa(user_id + ":" + session));
+                    show("home");
+                    await updateHeader();
+                } else alert("Cannot create user!");
+            }
+
+            async function listProducts() {
+                const user = await getCurrentUser();
+
+                if (!user) {
+                    return alert("You need to login first!");
+                }
+
+                const response = await fetch("/api/products", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                });
+
+                if (response.status === 200) {
+                    products = await response.json();
+
+                    $("#list-products").html("");
+                    for (let product of products) {
+                        $("#list-products").append(
+                            $("<a>")
+                                .attr("href", "#")
+                                .addClass("list-group-item list-group-item-action")
+                                .text(product.name)
+                                .click((_) => readProduct(product.id))
+                        );
+                    }
+                    $("#open_product_id").val("");
+                    show("list");
+                } else logout();
+            }
+
+            async function openCreateProduct() {
+                const user = await getCurrentUser();
+                if (!user) {
+                    return alert("You need to login first!");
+                }
+
+                show("create");
+                $("#create_name").val("");
+                $("#create_description").val("");
+                $("#create_content").val("");
+                $("#created_product").hide();
+                $("#license_1").val("");
+                $("#license_2").val("");
+                $("#license_3").val("");
+                $("#license_4").val("");
+                $("#license_5").val("");
+                $("#product_read_content").hide();
+                $("#product_read_content textarea").val();
+            }
+
+            async function createProduct() {
+                let name = $("#create_name").val();
+                let description = $("#create_description").val();
+                let content = $("#create_content").val();
+
+                if (!name || name.length === 0) return alert("invalid name!");
+                if (!description || description.length === 0) return alert("invalid description!");
+                if (!content || content.length === 0) return alert("invalid content!");
+
+                const response = await fetch("/api/products", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                    body: new URLSearchParams({ name, description, content }),
+                });
+
+                if (response.status === 201) {
+                    let productData = await response.json();
+                    $("#created_product").show();
+                    $("#license_1").val(productData.keys[0]);
+                    $("#license_2").val(productData.keys[1]);
+                    $("#license_3").val(productData.keys[2]);
+                    $("#license_4").val(productData.keys[3]);
+                    $("#license_5").val(productData.keys[4]);
+                    $("#created_product_id").text(productData.id);
+                } else alert("error in creating product!");
+            }
+
+            async function readProduct(id) {
+                if (!id) return alert("invalid product!");
+
+                const response = await fetch("/api/products/" + id, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                    },
+                });
+
+                const user = await getCurrentUser();
+
+                if (response.status === 200) {
+                    product = await response.json();
+                    $("#product_id_info").text(product.id);
+                    $("#product_publisher").text(product.publisher.username);
+                    $("#product_description").text(product.description);
+                    $("#product_created").text(product.created_at);
+                    $("#product_id").val(product.id);
+
+                    $("#product_read_content").hide();
+                    $("#product_read_content textarea").val("");
+
+                    $("#insert_license input").val("");
+                    if (user && user.id === product.publisher.id) $("#insert_license").hide();
+                    else $("#insert_license").show();
+                    show("read");
+                } else {
+                    alert("Cannot read product!");
+                    listProducts();
+                }
+            }
+
+            async function downloadProduct() {
+                let license = $("#license").val();
+                let product = $("#product_id").val();
+
+                if (!product || product.length === 0) return alert("Invalid product!");
+
+                const response = await fetch("/api/products/" + product + "/download", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded", Authorization: "Bearer " + localStorage.getItem("token") },
+                    body: new URLSearchParams({ license }),
+                });
+
+                if (response.status === 200) {
+                    $("#product_read_content").show();
+                    $("#product_read_content textarea").val(await response.text());
+                } else alert("Invalid license!");
+            }
+
+            show("home");
+            updateHeader();
+        </script>
+    </body>
+</html>

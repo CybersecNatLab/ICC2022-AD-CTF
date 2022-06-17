@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1><i class="fa-solid fa-user"></i> {{user["username"]}}'s profile</h1>
+
+<h3 class="mt-3"><i class="fa-solid fa-photo-film"></i> Owned NFTS</h3>
+{% for nft in nfts %}
+<div class="card mt-3 m-auto w-100">
+  <h5 class="card-header">{{nft['title']}}</h5>
+  <div class="card-body">
+    <p class="card-text">An nft. Only the owner can see its contents!</p>
+    <a href="{{url_for('frontend.view', nft_id=nft.nft_id)}}" class="btn btn-primary"
+      ><i class="fa-solid fa-magnifying-glass"></i> View</a
+    >
+  </div>
+  <div class="card-footer text-muted">
+    <i class="fa-solid fa-coins"></i> Price: {{nft['price']}} {% if nft['chain_number'] %}$SC{% else %}$PC{% endif %}
+  </div>
+</div>
+
+{% endfor %}
+
+<h3 class="mt-5"><i class="fa-solid fa-money-bill-transfer"></i> Current transactions</h3>
+<p class="card-text">All this user's transactions</p>
+<ul class="list-group"></ul>
+
+<script type="text/javascript">
+  const socket = io("http://" + location.host);
+  socket.connect();
+
+  function transaction_to_html(item) {
+    var val = "<li class='list-group-item active'>" + item.tx_id + "</li>";
+    val += "<li class='list-group-item'><b>time</b>: " + item.time_executed + "</li>";
+    val += "<li class='list-group-item'><b>from_user</b>: " + item.from_user + "</li>";
+    val += "<li class='list-group-item'><b>to_user</b>: " + item.to_user + "</li>";
+    val += "<li class='list-group-item'><b>type</b>: " + item.type + "</li>";
+    return val;
+  }
+
+  socket.on("connect", () => {
+    console.log(socket.connected); // true
+    socket.emit("transactions_for_user", "{{user['id']}}");
+  });
+
+  socket.on("transactions_resp", (data) => {
+    $(".list-group").empty();
+    data.forEach((item) => {
+      var html = transaction_to_html(item);
+      $(".list-group").append(html);
+    });
+  });
+
+  socket.on("transactions_rt", (item) => {
+    var user_id = "{{user['id']}}";
+    if (item.from_user != user_id && item.to_user != user_id) return;
+    var html = transaction_to_html(item);
+    $(".list-group").prepend(html);
+  });
+</script>
+{% endblock %}
