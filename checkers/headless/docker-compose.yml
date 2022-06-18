@@ -1,8 +1,5 @@
 version: "2"
 services:
-  #TODO:
-  # - Restart
-  # Limits
   headless_team_0:
     build: .
     environment:

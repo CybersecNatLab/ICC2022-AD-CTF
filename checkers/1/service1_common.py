@@ -3,7 +3,6 @@ import string
 import checklib
 import sys
 
-# TODO: RANDOMIZE USER AGENT
 data = checklib.get_data()
 action = data['action']
 
@@ -19,53 +18,54 @@ closedsea_baseurl = 'http://{}:3003'.format(team_ip)
 minter_baseurl = 'http://{}:3004'.format(team_ip)
 
 nft_adj = [
-'Candid',
-'Canine',
-'Capital',
-'Carefree',
-'Careful',
-'Difficult',
-'Dizzy',
-'Focused',
-'Fond',
-'Foolhardy',
-'Impressive',
-'Improbable',
-'Meaty',
-'Medical',
-'Mediocre'
+    'Candid',
+    'Canine',
+    'Capital',
+    'Carefree',
+    'Careful',
+    'Difficult',
+    'Dizzy',
+    'Focused',
+    'Fond',
+    'Foolhardy',
+    'Impressive',
+    'Improbable',
+    'Meaty',
+    'Medical',
+    'Mediocre'
 ]
 
 nft_animals = [
-'Albatross',
-'Alligator',
-'Alpaca',
-'Angelfish',
-'Armadillo',
-'Beaver',
-'Bee',
-'Beetle',
-'Coati',
-'Cobra',
-'Cockroach',
-'Eagle',
-'Earwig',
-'Echidna',
-'Gopher',
-'Gorilla',
-'Goshawk',
-'Lemming',
-'Lemur',
-'Leopard',
-'Squid',
-'Squirrel',
-'Starfish',
-'Starling',
-'Wolf',
-'Wolverine',
-'Wombat',
-'Woodcock'
+    'Albatross',
+    'Alligator',
+    'Alpaca',
+    'Angelfish',
+    'Armadillo',
+    'Beaver',
+    'Bee',
+    'Beetle',
+    'Coati',
+    'Cobra',
+    'Cockroach',
+    'Eagle',
+    'Earwig',
+    'Echidna',
+    'Gopher',
+    'Gorilla',
+    'Goshawk',
+    'Lemming',
+    'Lemur',
+    'Leopard',
+    'Squid',
+    'Squirrel',
+    'Starfish',
+    'Starling',
+    'Wolf',
+    'Wolverine',
+    'Wombat',
+    'Woodcock'
 ]
+
 
 def check_response_ok(resp, status=200, in_resp=False, msg='', sio=False):
 
@@ -84,15 +84,17 @@ def check_response_ok(resp, status=200, in_resp=False, msg='', sio=False):
         )
 
 
-def randstr(n, l=False,dictionary=string.ascii_letters):
+def randstr(n, l=False, dictionary=string.ascii_letters):
     if l:
         n = random.randint(n, l)
     return ''.join([random.choice(dictionary) for _ in range(n)])
 
+
 def set_seed(seed):
     random.seed(seed)
 
-def register_user(sess,username, password, key):
+
+def register_user(sess, username, password, key):
     URL = closedsea_baseurl + '/register'
 
     data = {
@@ -133,7 +135,7 @@ def login_user_minter(sess, username, password):
 
 def mint(sess, title, data, cost, is_public):
     URL = minter_baseurl + '/index.php'
-    data ={
+    data = {
         'title': title,
         'data': data,
         'price': cost,
@@ -144,6 +146,7 @@ def mint(sess, title, data, cost, is_public):
     except:
         return False
 
+
 def logout(sess):
     URL = closedsea_baseurl + '/logout'
     try:
@@ -151,17 +154,21 @@ def logout(sess):
     except:
         return False
 
+
 def list_all_nfts(sess):
     URL = closedsea_baseurl + '/listing'
     pass
 
+
 def list_all_nfts_websockets(sess):
     pass
 
+
 def create_user_cred():
-    username =  randstr(6,9)
-    password = randstr(6,9)
+    username = randstr(6, 9)
+    password = randstr(6, 9)
     return username, password
+
 
 def set_rand_ua(sess):
     with open('user_agents.txt', 'r') as f:

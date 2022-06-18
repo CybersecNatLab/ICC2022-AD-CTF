@@ -28,7 +28,7 @@ def check_sla():
         'password': password
     }
 
-    # Because socketio spawns another thread, we have to save the exit informations here. I feel dirty
+    # Because socketio spawns another thread, we have to save the exit informations here. I feel dirty for this code
     global status, msg_public, msg_debug
     status, msg_public, msg_debug = checklib.Status.ERROR, 'error', 'No exit code provided'
     sio = socketio.Client(reconnection_attempts=3)
@@ -61,9 +61,7 @@ def check_sla():
                     str(msg)
                 sio.disconnect()
                 quit()
-                #checklib.quit(checklib.Status.DOWN, 'Website down.', 'headless:' + str(msg))
             return True
-        # Sometimes this throws an exception when one of
         try:
             sio.emit('register', user_data, callback=lambda x: check(x))
         except:
@@ -91,7 +89,6 @@ def check_sla():
 
         # Retrieve the id of the nft
         nft_id_regex = re.compile('/view/(.*)\'><i', re.I)
-        #nft_id_regex = re.compile('/view/(.*)\'', re.I)
         nft_id = re.findall(nft_id_regex, resp.text)
         try:
             nft_id = nft_id[0]
@@ -99,21 +96,24 @@ def check_sla():
             status, msg_public, msg_debug = checklib.Status.DOWN, 'Could not retrieve nft_id', resp.text
             sio.disconnect()
             quit()
-            #checklib.quit(checklib.Status.DOWN, 'Could not retrieve nft_id', resp.text)
+
         # Visit the view page
         try:
             resp = sess.get(closedsea_baseurl + '/view/' + nft_id)
         except:
             resp = False
-        check_response_ok_global(resp, in_resp=nft_data, msg='View nft not working', sio=sio)
-        check_response_ok_global(resp, in_resp='own', msg='View nft not working', sio=sio)
-        
+        check_response_ok_global(
+            resp, in_resp=nft_data, msg='View nft not working', sio=sio)
+        check_response_ok_global(
+            resp, in_resp='own', msg='View nft not working', sio=sio)
+
         try:
             resp = sess.get(closedsea_baseurl + '/dashboard')
         except:
             resp = False
         # Check that the dummy nft is in the dashboard
-        check_response_ok_global(resp, in_resp=nft_data, msg='Minting not working', sio=sio)
+        check_response_ok_global(
+            resp, in_resp=nft_data, msg='Minting not working', sio=sio)
 
         sio.emit('buy', {'nft_id': nft_id})
 
@@ -133,7 +133,6 @@ def check_sla():
         status, msg_public, msg_debug = checklib.Status.OK, 'OK', ''
         sio.disconnect()
         quit()
-        #checklib.quit(checklib.Status.OK, 'OK')
 
     @sio.event
     def connect_error(data):
@@ -141,11 +140,11 @@ def check_sla():
         status, msg_public, msg_debug = checklib.Status.ERROR, 'error', 'error: headless disconnected unexpectedly'
         sio.disconnect()
         quit()
-        #checklib.quit(checklib.Status.ERROR, 'error', 'error: headless disconnected unexpectedly')
 
     # wait for the headleass to finish
     sio.wait()
     checklib.quit(status, msg_public, msg_debug)
+
 
 # Put the flag.
 # 1) Create an account for the owner of the flag (headless)
@@ -153,8 +152,6 @@ def check_sla():
 # 3) Mint a dummy nft with the seller
 # 4) The headless makes a transaction and buys the dummy nft, in order to create a transanction with it's own private key
 # 5) If everything above goes ok, mint the flag
-
-
 def put_flag():
     data = checklib.get_data()
     set_seed(data['flag'])
@@ -221,7 +218,8 @@ def put_flag():
 
         # Mint a dummy NFT
         rand_title1 = randstr(1, dictionary=nft_adj) + ' ' \
-            + randstr(1, dictionary=nft_animals) + ' n:' + randstr(2, 8, string.digits)
+            + randstr(1, dictionary=nft_animals) + \
+            ' n:' + randstr(2, 8, string.digits)
 
         resp = mint(sess, rand_title1, nft_data, random.randint(2, 6), 'true')
         check_response_ok_global(
@@ -244,7 +242,8 @@ def put_flag():
         except:
             resp = False
         # Check that the flag is in the dashboard
-        check_response_ok_global(resp, in_resp=nft_data, msg='Minting not working', sio=sio)
+        check_response_ok_global(
+            resp, in_resp=nft_data, msg='Minting not working', sio=sio)
 
         sio.emit('buy', {'nft_id': nft_id})
 

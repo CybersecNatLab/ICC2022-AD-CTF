@@ -39,11 +39,23 @@ Signatures will be made client side while buying on OpenSea, and will be verifie
 
 ### Store 1: private NFTs
 
-The service is vulnerable to an [HTTP request smuggling attacks](https://portswigger.net/web-security/request-smuggling), this can be used as a base to exploit several vulnerabilities in the service. 
+#### Vuln 1: Mint duplicate NFT
 
-#### Vuln 1: switch chains
+There are multiple issues regarding the minting of an NFT that, when put together, make it possible to switch an NFT from private to public (and vice versa).
 
-The "switch chain" operation is not signed, so we can smuggle a request for arbitrary NFTs and buy them legally once they are public.
+1. The table `nft_chain` uses a composite PRIMARY KEY, made of the nft_id and the chain number. This allows for two entries for the same NFT
+2. In transaction, the code that inserts a new NFT into the database does not check the result of the INSERT query, making it possible to insert a new row into the `nft_chain` table.
+3. The minter service has a bug that permits attackers to force an id value for the newly created NFT.
+   This makes it possible to force-switch a private NFT to public.
+
+#### Vuln 2: HTTP 2 smuggling attack
+
+The service `transactions` is misconfigured, allowing for plain-text HTTP2 connections. This allows an attacker to make an HTTP2 upgrade request thru the websocket route, leading to believe nginx that there is a websocket session opened when instead it is just an http2 session. You can read more about this attack [here](https://bishopfox.com/blog/h2c-smuggling-request).
+Thank this issue, it is possible to directly communicate with the transaction service, allowing an attacker to donate every NFT they want or exploiting the vuln above using directly the `/mint` endpoint
+
+#### Vuln 3: arbitrary donation
+
+The `transactions` component doesn't check if the signature has been made with the NFT owner's keys; so it is possible to send a donate transaction with any valid signature from the keypair of a new user.
 
 #### Vuln 2: buy private NFTs
 

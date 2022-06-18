@@ -6,11 +6,7 @@ RUN apt-get update \
     libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 dumb-init \
  && rm -rf /var/lib/apt/lists/*
 
-
-#RUN chmod -R o+rx /usr/local/lib/nodejs/node-v12.22.1-linux-x64/lib/node_modules/puppeteer/.local-chromium
-
 WORKDIR /app
-
 
 COPY . /app
 RUN npm install

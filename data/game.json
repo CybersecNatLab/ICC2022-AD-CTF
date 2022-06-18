@@ -1,0 +1,84 @@
+{
+  "start": "2022-06-16T10:00:00+03:00",
+  "rounds": 240,
+  "freeze": 210,
+  "roundTime": 120,
+  "flagLifetime": 5,
+  "teams": [
+    {
+      "name": "NOP Team",
+      "logo": "cybersecnatlab",
+      "nop": true
+    },
+    {
+       "name": "ACSC Team",
+       "logo": "asia"
+    },
+    {
+       "name": "US Cyber Games",
+       "logo": "usa"
+    },
+    {
+       "name": "CyberSci Team Canada",
+       "logo": "canada"
+    },
+    {
+       "name": "Team Europe",
+       "logo": "europe"
+    },
+    {
+       "name": "Africa Team",
+       "logo": "africa"
+    },
+    {
+       "name": "Team Oceania",
+       "logo": "oceania"
+    },
+    {
+       "name": "Latam Team",
+       "logo": "latina"
+    }
+  ],
+  "services": [
+    {
+      "name": "ClosedSea 1",
+      "startingScore": 5000,
+      "timeout": 17000
+    },
+    {
+      "name": "ClosedSea 2",
+      "startingScore": 5000,
+      "timeout": 17000
+    },
+    {
+      "name": "CU - ExamNotes",
+      "startingScore": 5000,
+      "timeout": 10000
+    },
+    {
+      "name": "CU - EncryptedNotes",
+      "startingScore": 5000,
+      "timeout": 10000
+    },
+    {
+      "name": "CU - ExamPortal",
+      "startingScore": 5000,
+      "timeout": 10000
+    },
+    {
+      "name": "RPN 1",
+      "startingScore": 5000,
+      "timeout": 10000
+    },
+    {
+      "name": "RPN 2",
+      "startingScore": 5000,
+      "timeout": 10000
+    },
+    {
+      "name": "Trademark",
+      "startingScore": 5000,
+      "timeout": 15000
+    }
+  ]
+}

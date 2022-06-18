@@ -173,7 +173,6 @@ def check_sla():
         check_response_ok_global(
             resp, in_resp=nft_data_donations, msg='Cannot donate nft', sio=sio)
 
-        #status, msg_public, msg_debug = checklib.Status.OK, 'OK', ''
         sio.disconnect()
         quit()
 
@@ -183,7 +182,6 @@ def check_sla():
         status, msg_public, msg_debug = checklib.Status.ERROR, 'error', 'error: headless disconnected unexpectedly'
         sio.disconnect()
         quit()
-        #checklib.quit(checklib.Status.ERROR, 'error', 'error: headless disconnected unexpectedly')
 
     # wait for the headleass to finish
     sio.wait()
@@ -192,7 +190,7 @@ def check_sla():
 
     status, msg_public, msg_debug = checklib.Status.ERROR, '', ''
 
-    # Check that the websocket are actually
+    # Check that the websocket are actually working
     sio_closedsea = socketio.Client(reconnection_attempts=3)
 
     @sio_closedsea.on('connect')
@@ -247,11 +245,11 @@ def put_flag():
     resp = register_user(sess, username, password,
                          randstr(128, dictionary=hexdigits))
     check_response_ok(resp, in_resp=username, msg='Could not register user')
-    # todo: Controllare login minter
+
     resp = login_user_minter(sess, username, password)
     check_response_ok(resp, in_resp='Mint an nft',
                       msg='Could not login user on minter')
-    #check_response_ok(resp, in_resp=username, msg='Could not login user on minter')
+
     flag_title = randstr(1, dictionary=nft_adj) + ' ' + randstr(1,
                                                                 dictionary=nft_animals) + ' n:' + randstr(2, 8, string.digits)
 
@@ -273,7 +271,7 @@ def put_flag():
     check_response_ok(
         resp, in_resp=flag, msg='Cannot insert the flag.')
 
-    # Check that the websocket are actually
+    # Check that the websocket are actually working
 
     checklib.post_flag_id(service_name, service_addr, flag_id)
     checklib.quit(checklib.Status.OK, 'OK')
@@ -300,13 +298,6 @@ def get_flag():
         resp = False
     check_response_ok(resp, in_resp=flag, msg='Cannot find flag 1')
 
-    # login as user
-
-    # check dashboard and item view
-
-    # ok
-
-    # If OK
     checklib.quit(checklib.Status.OK, 'OK')
 
 
